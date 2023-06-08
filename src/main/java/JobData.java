@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -41,6 +38,8 @@ public class JobData {
                 values.add(aValue);
             }
         }
+        // sort values
+        Collections.sort(values);
 
         return values;
     }
@@ -49,19 +48,19 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
-
-        return allJobs;
+        // Oracle documentation was kinda confusing as to the syntax for bonus 2
+        return new ArrayList<>(allJobs);
     }
 
     /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
-     *
+     * <p>
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
      *
-     * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param column Column that should be searched.
+     * @param value  Value of teh field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -75,7 +74,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -87,7 +86,7 @@ public class JobData {
      * Search all columns for the given term
      *
      * @param value The search term to look for
-     * @return      List of all jobs with at least one field containing the value
+     * @return List of all jobs with at least one field containing the value
      */
     public static ArrayList<HashMap<String, String>> findByValue(String value) {
 
@@ -95,7 +94,25 @@ public class JobData {
         loadData();
 
         // TODO - implement this method
-        return null;
+        /* After studying findByColumnAndValue, I decided to copy that structure,
+        but to search through every column I needed to loop through each hashmap entry (each entry representing a column)
+        and check if the column contained the search value. If it did and the search results (ArrayList jobs) did not already contain that
+        row, then that row was added to the search results
+        */
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+
+            for (Map.Entry<String, String> jobColumn : row.entrySet()) {
+
+                if (jobColumn.getValue().toLowerCase().contains(value.toLowerCase())/* the row has any key that contains the value */ && !jobs.contains(row)) {
+                    jobs.add(row);
+                }
+            }
+        }
+
+        return jobs;
+//        return null;
     }
 
     /**

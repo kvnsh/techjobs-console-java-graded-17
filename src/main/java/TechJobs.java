@@ -12,6 +12,7 @@ public class TechJobs {
 
     public static void main(String[] args) {
 
+
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
         columnChoices.put("core competency", "Skill");

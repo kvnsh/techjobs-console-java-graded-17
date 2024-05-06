@@ -46,6 +46,7 @@ public class JobData {
 
     public static ArrayList<HashMap<String, String>> findAll() {
 
+
         // load data, if not already loaded
         loadData();
         // Oracle documentation was kinda confusing as to the syntax for bonus 2

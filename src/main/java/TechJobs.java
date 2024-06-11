@@ -128,6 +128,7 @@ public class TechJobs {
                     System.out.println(jobInfo.getKey() + ": " + jobInfo.getValue());
                 }
                 System.out.print("*****\n");
+
             }
         }
 //        System.out.println("printJobs is not implemented yet");
